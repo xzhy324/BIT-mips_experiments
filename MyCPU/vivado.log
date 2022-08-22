@@ -1,0 +1,19 @@
+#-----------------------------------------------------------
+# Vivado v2019.2 (64-bit)
+# SW Build 2708876 on Wed Nov  6 21:40:23 MST 2019
+# IP Build 2700528 on Thu Nov  7 00:09:20 MST 2019
+# Start of session at: Mon Aug 22 10:04:08 2022
+# Process ID: 22108
+# Current directory: C:/projects/BIT-MIPS/bitmips_experiments/MyCPU
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent18568 C:\projects\BIT-MIPS\bitmips_experiments\MyCPU\MyCPU.xpr
+# Log file: C:/projects/BIT-MIPS/bitmips_experiments/MyCPU/vivado.log
+# Journal file: C:/projects/BIT-MIPS/bitmips_experiments/MyCPU\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project C:/projects/BIT-MIPS/bitmips_experiments/MyCPU/MyCPU.xpr
+Scanning sources...
+Finished scanning sources
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/vivado/Vivado/2019.2/data/ip'.
+open_project: Time (s): cpu = 00:00:14 ; elapsed = 00:00:07 . Memory (MB): peak = 899.980 ; gain = 223.934
