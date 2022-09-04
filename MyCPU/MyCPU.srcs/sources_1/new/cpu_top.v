@@ -1,73 +1,64 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 2022/08/21 14:54:31
-// Design Name: 
-// Module Name: cpu_top
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-
 
 module cpu_top(
     input clk,
     input rst
     );
     
-    wire [31:0] offset; //offset for 'beq'
-    wire [31:0] target;//target for 'j'
-    wire [17:0] beq_imm; //intermediate var for 'beq'
     wire [31:0] pc_value;
     
-    wire [31:0] inst;
-    wire [15:0] imm;
-    wire [31:0] ex_imm;
-    wire [5:0] opcode;
-    wire [5:0] func;
-    wire [4:0] shamt;
-    wire [25:0] instr_index;
+    wire [31:0] inst;//instruction
+    wire [15:0] imm;//part of instruction
+    wire [31:0] ex_imm; //output of sig_extend module
+    wire [31:0] exz_imm;//intermediate variable for sig_ex
+    wire [31:0] exs_imm;//intermediate variable for sig_ex
+    wire [5:0] opcode;//part of instruction
+    wire [5:0] func;//part of instruction
+    wire [4:0] shamt;//part of instruction
+    wire [25:0] instr_index;//part of instruction
     
-    wire c1,c2,c3,c4;
+    //control signal
+    wire c1,c2,c3,c4,cexz;
     wire [3:0] cA;
     wire [1:0] cB;
     wire dmem_we, reg_we;
     
-    
+    //alu wire
     wire [31:0] alu_num1;
     wire [31:0] alu_num2;
     wire [31:0] alu_ans;
     
+    //regfile wire
     wire [31:0] rs_data;
     wire [31:0] rt_data;
     wire [31:0] wb_data;
     wire [4:0] wb_addr;
     wire [4:0] rs_addr;
     wire [4:0] rt_addr;
+    wire [4:0] rd_addr;
     
+    //data read from data_memory
     wire [31:0] mem_data;
     
     
-    assign imm = inst[15:0];
-    assign ex_imm = { {16{imm[15]}}, imm};
     
+    
+    //sig_extend module
+    assign imm = inst[15:0];
+    assign exz_imm = {16'b0,imm};
+    assign exs_imm = { {16{imm[15]}}, imm};
+    assign ex_imm = (cexz==0)?exz_imm:exs_imm;
+    
+    //decode module
     assign opcode = inst[31:26];
     assign rs_addr = inst[25:21];
     assign rt_addr = inst[20:16];
     assign rd_addr = inst[15:11];
     assign shamt = inst[10:6];
     assign func = inst[5:0];
+    assign instr_index = inst[25:0];
     
+    //control module
     ctrl Ctrl(
         .opcode(opcode),
         .func(func),
@@ -76,33 +67,28 @@ module cpu_top(
         .c2(c2),
         .c3(c3),
         .c4(c4),
+        .cexz(cexz),
         .cA(cA),
         .cB(cB),
         .dmem_we(dmem_we),
         .reg_we(reg_we)
     );
     
-    
-    assign instr_index = inst[25:0];
-    assign target = {pc_value[31:28],{instr_index,2'b0}};
-    assign beq_imm = {inst[15:0],2'b0};
-    assign offset = { {14{beq_imm[17]}} , beq_imm}; 
-        
+    //(pc + br_unit) module
     pc PC(
         .clk(clk),
         .rst(rst),
         
         .ctrl(cB),
-        .target(target),
-        .offset(offset),
+        .instr_index(instr_index),
+        .beq_mark(alu_ans[0]),
         
         .pc_value(pc_value)
     );
     
-    
+    //alu module
     assign alu_num1 = (c3==0)? rs_data: ex_imm;
     assign alu_num2 = (c1==0)? rt_data: ex_imm;
-    
     alu ALU(
         .clk(clk),
         .rst(rst),
@@ -114,9 +100,9 @@ module cpu_top(
         .ans(alu_ans)
     );
     
+    //regfile module
     assign wb_data = (c4==0)?alu_ans:mem_data;
     assign wb_addr = (c2==0)?rt_addr:rd_addr;
-    
     regfile RegFile(
         .clk(clk),
         .rst(rst),
@@ -131,7 +117,7 @@ module cpu_top(
         .rt_data(rt_data)
     );
     
-    
+    //data_memory module
     dmem dMem(
         .clk(clk),
         .rst(rst),
@@ -143,7 +129,7 @@ module cpu_top(
         .r_data(mem_data)
     );
     
-    
+    //instruction_memory module
     imem iMem(
         .clk(clk),
         .rst(rst),

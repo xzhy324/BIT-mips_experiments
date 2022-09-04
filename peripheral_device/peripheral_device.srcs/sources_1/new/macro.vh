@@ -1,0 +1,1 @@
+`define RST_TRIGGERED  1'b1

@@ -1,24 +1,4 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 2022/08/21 16:48:43
-// Design Name: 
-// Module Name: dmem
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-
 
 module dmem(
     input clk,
@@ -36,7 +16,7 @@ module dmem(
     
     //initialize dmem from local txt file
     initial begin
-        $readmemb("C:/mipstest/dmem_init.txt",dmem);
+        $readmemb("C:/projects/BIT-MIPS/bitmips_experiments/test/singletest/dmem_init.txt",dmem);
     end
     
     //read data from dmem

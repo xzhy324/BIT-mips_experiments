@@ -11,3 +11,10 @@
 #-----------------------------------------------------------
 start_gui
 open_project C:/projects/BIT-MIPS/bitmips_experiments/MyCPU/MyCPU.xpr
+update_compile_order -fileset sources_1
+update_compile_order -fileset sources_1
+update_compile_order -fileset sources_1
+update_compile_order -fileset sources_1
+launch_simulation
+source cpu_top.tcl
+close_sim

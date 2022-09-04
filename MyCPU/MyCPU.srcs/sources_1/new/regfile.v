@@ -1,24 +1,4 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 2022/08/21 16:46:58
-// Design Name: 
-// Module Name: regfile
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-
 
 module regfile(
     input clk,
@@ -47,8 +27,8 @@ module regfile(
     end
     
     //reading 
-    assign rs_data = regs[rs_addr];
-    assign rt_data = regs[rt_addr];
+    assign rs_data = (rs_addr==0)? 32'b0: regs[rs_addr];
+    assign rt_data = (rt_addr==0)? 32'b0: regs[rt_addr];
    
     
 endmodule

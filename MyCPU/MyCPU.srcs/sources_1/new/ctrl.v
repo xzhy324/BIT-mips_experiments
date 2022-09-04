@@ -1,24 +1,4 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 2022/08/21 18:28:24
-// Design Name: 
-// Module Name: ctrl
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-
 
 module ctrl(
         input [5:0] opcode,
@@ -28,6 +8,7 @@ module ctrl(
         output c2,
         output c3,
         output c4,
+        output cexz,
         output [3:0] cA,
         output [1:0] cB,
         output dmem_we,
@@ -44,22 +25,24 @@ module ctrl(
         (opcode==6'b101011)? 4: //sw
         (opcode==6'b000100)? 5: //beq
         (opcode==6'b000010)? 6: //j
+        (opcode==6'b001101)? 8: //ori
         (opcode==6'b000000)? (
             (func==6'b100000)? 2: //add
             (func==6'b000000)? 7: //sll
             10):10;//reserved
             
     
-    assign c1 = (inst_type==0||inst_type==1||inst_type==3||inst_type==4)? 1:0;
+    assign c1 = (inst_type==0||inst_type==1||inst_type==3||inst_type==4||inst_type==8)? 1:0;
     assign c2 = (inst_type==2||inst_type==7)? 1:0;
     assign c3 = (inst_type==7)?1:0;
     assign c4 = (inst_type==3)?1:0;
+    assign cexz = (inst_type==10)?1:0;
     assign cA = inst_type[3:0];
     assign cB = 
         (inst_type==5)? 2'b01:
         (inst_type==6)? 2'b10: 2'b00;
     
     assign dmem_we = (inst_type==4)? 1:0;
-    assign reg_we = (inst_type==4||inst_type==5||inst_type==6)?0:1;
+    assign reg_we = (inst_type==4||inst_type==5||inst_type==6)?0:1; //attention [0:1]
         
 endmodule
