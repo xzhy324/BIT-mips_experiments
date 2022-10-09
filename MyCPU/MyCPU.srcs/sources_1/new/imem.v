@@ -13,7 +13,7 @@ module imem(//read-only instruction-memory
     
     //initialize imem from local txt file
     initial begin
-        $readmemh("C:/projects/BIT-MIPS/bitmips_experiments/test/singletest/Fibonacci.hex",imem);
+        $readmemh("C:/projects/BIT-MIPS/bitmips_experiments/test/singletest/extra_test.hex",imem);
     end
     
     //read instruction from imem

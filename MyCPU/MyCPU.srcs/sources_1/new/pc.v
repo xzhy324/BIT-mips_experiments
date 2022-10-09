@@ -32,7 +32,7 @@ module pc(
         end
         else if(ctrl == 2'b10)begin
             //j
-            pc_val <= offset;
+            pc_val <= target;
         end
         else begin
             //default
